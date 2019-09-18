@@ -12,10 +12,10 @@ module Data.Flat.Encoder.Prim
   , eBitsF
   , eFloatF
   , eDoubleF
-  #ifndef ghcjs_HOST_OS
-  , eUTF16F
-  #endif
-  , eUTF8F
+-- #ifndef ghcjs_HOST_OS
+--   , eUTF16F
+-- #endif
+--   , eUTF8F
   , eCharF
   , eNaturalF
   , eIntegerF
@@ -57,10 +57,10 @@ import           Data.Flat.Memory
 import           Data.Flat.Types
 import           Data.FloatCast
 import           Data.Primitive.ByteArray
-import qualified Data.Text                      as T
-import qualified Data.Text.Array                as TA
-import qualified Data.Text.Encoding             as TE
-import qualified Data.Text.Internal             as TI
+-- import qualified Data.Text                      as T
+-- import qualified Data.Text.Array                as TA
+-- import qualified Data.Text.Encoding             as TE
+-- import qualified Data.Text.Internal             as TI
 import           Data.ZigZag
 import           Foreign
 -- import Debug.Trace
@@ -228,18 +228,18 @@ low7 t = fromIntegral t .&. 0x7F
 
 -- | Encode text as UTF8 and encode the result as an array of bytes
 -- PROB: encodeUtf8 calls a C primitive, not compatible with GHCJS
-eUTF8F :: T.Text -> Prim
-eUTF8F = eBytesF . TE.encodeUtf8
--- PROB: Not compatible with GHCJS
--- | Encode text as UTF16 and encode the result as an array of bytes
--- Efficient, as Text is already internally encoded as UTF16.
-#ifndef ghcjs_HOST_OS
-eUTF16F :: T.Text -> Prim
-eUTF16F t = eFillerF >=> eUTF16F_ t
-  where
-    eUTF16F_ !(TI.Text (TA.Array array) w16Off w16Len) s =
-      writeArray array (2 * w16Off) (2 * w16Len) (nextPtr s)
-#endif
+-- eUTF8F :: T.Text -> Prim
+-- eUTF8F = eBytesF . TE.encodeUtf8
+-- -- PROB: Not compatible with GHCJS
+-- -- | Encode text as UTF16 and encode the result as an array of bytes
+-- -- Efficient, as Text is already internally encoded as UTF16.
+-- #ifndef ghcjs_HOST_OS
+-- eUTF16F :: T.Text -> Prim
+-- eUTF16F t = eFillerF >=> eUTF16F_ t
+--   where
+--     eUTF16F_ !(TI.Text (TA.Array array) w16Off w16Len) s =
+--       writeArray array (2 * w16Off) (2 * w16Len) (nextPtr s)
+-- #endif
 eLazyBytesF :: L.ByteString -> Prim
 eLazyBytesF bs = eFillerF >=> \s -> write bs (nextPtr s)
     -- Single copy

@@ -23,9 +23,9 @@ module Data.Flat.Encoder (
     eTrue,
     eFalse,
     eBytes,
-    #ifndef ghcjs_HOST_OS
-    eUTF16,
-    #endif
+-- #ifndef ghcjs_HOST_OS
+--     eUTF16,
+-- #endif
     eLazyBytes,
     eShortBytes,
     eInt,
@@ -57,13 +57,13 @@ module Data.Flat.Encoder (
     sBytes,
     sLazyBytes,
     sShortBytes,
-    #ifndef ghcjs_HOST_OS
-    sUTF16,
-    #endif
+-- #ifndef ghcjs_HOST_OS
+--     sUTF16,
+-- #endif
     sFillerMax,
     sBool,
-    sUTF8Max,
-    eUTF8,
+    -- sUTF8Max,
+    -- eUTF8,
 #ifdef ETA_VERSION
     trampolineEncoding,
 #endif

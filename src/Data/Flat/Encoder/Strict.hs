@@ -105,7 +105,7 @@ encodeArrayWith f ws = Encoding $ go ws
 
 -- Encoding primitives
 {-# INLINE eChar #-}
-{-# INLINE eUTF8 #-}
+-- {-# INLINE eUTF8 #-}
 {-# INLINE eNatural #-}
 {-# INLINE eFloat #-}
 {-# INLINE eDouble #-}
@@ -127,13 +127,13 @@ encodeArrayWith f ws = Encoding $ go ws
 {-# INLINE eFalse #-}
 eChar :: Char -> Encoding
 eChar = Encoding . eCharF
-#ifndef ghcjs_HOST_OS
-{-# INLINE eUTF16 #-}
-eUTF16 :: Text -> Encoding
-eUTF16 = Encoding . eUTF16F
-#endif
-eUTF8 :: Text -> Encoding
-eUTF8 = Encoding . eUTF8F
+-- #ifndef ghcjs_HOST_OS
+-- {-# INLINE eUTF16 #-}
+-- eUTF16 :: Text -> Encoding
+-- eUTF16 = Encoding . eUTF16F
+-- #endif
+-- eUTF8 :: Text -> Encoding
+-- eUTF8 = Encoding . eUTF8F
 
 eBytes :: B.ByteString -> Encoding
 eBytes = Encoding . eBytesF
@@ -270,12 +270,12 @@ sInteger :: Size Integer
 sInteger = vsize S.sInteger
 
 -- sUTF8 = vsize S.sUTF8
-sUTF8Max :: Size Text
-sUTF8Max = vsize S.sUTF8Max
-#ifndef ghcjs_HOST_OS
-sUTF16 :: Size Text
-sUTF16 = vsize S.sUTF16
-#endif
+-- sUTF8Max :: Size Text
+-- sUTF8Max = vsize S.sUTF8Max
+-- #ifndef ghcjs_HOST_OS
+-- sUTF16 :: Size Text
+-- sUTF16 = vsize S.sUTF16
+-- #endif
 sFillerMax :: Size a
 sFillerMax = csize S.sFillerMax
 
