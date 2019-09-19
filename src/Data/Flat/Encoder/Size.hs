@@ -12,8 +12,6 @@ import           Data.Char
 import           Data.Flat.Encoder.Prim         (w7l)
 import           Data.Flat.Encoder.Types
 import           Data.Flat.Types
--- import qualified Data.Text                      as T
--- import qualified Data.Text.Internal             as T
 import           Data.ZigZag
 #include "MachDeps.h"
 -- A filler can take anything from 1 to 8 bits
@@ -115,17 +113,6 @@ sIntegral t =
   let vs = w7l t
    in length vs * 8
 
---sUTF8 :: T.Text -> NumBits
---sUTF8 t = fold
--- Wildly pessimistic but fast
--- {-# INLINE sUTF8Max #-}
--- sUTF8Max :: Text -> NumBits
--- sUTF8Max = blobBits . (4 *) . T.length
--- #ifndef ghcjs_HOST_OS
--- {-# INLINE sUTF16 #-}
--- sUTF16 :: T.Text -> NumBits
--- sUTF16 = blobBits . textBytes
--- #endif
 {-# INLINE sBytes #-}
 sBytes :: B.ByteString -> NumBits
 sBytes = blobBits . B.length
@@ -137,17 +124,7 @@ sLazyBytes bs = 16 + L.foldrChunks (\b l -> blkBitsBS b + l) 0 bs
 {-# INLINE sShortBytes #-}
 sShortBytes :: SBS.ShortByteString -> NumBits
 sShortBytes = blobBits . SBS.length
--- #ifndef ghcjs_HOST_OS
--- -- We are not interested in the number of unicode chars (returned by T.length, an O(n) operation)
--- -- just the number of bytes
--- -- > T.length (T.pack "\x1F600")
--- -- 1
--- -- > textBytes (T.pack "\x1F600")
--- -- 4
--- {-# INLINE textBytes #-}
--- textBytes :: T.Text -> Int
--- textBytes !(T.Text _ _ w16Len) = w16Len * 2
--- #endif
+
 {-# INLINE bitsToBytes #-}
 bitsToBytes :: Int -> Int
 bitsToBytes = numBlks 8

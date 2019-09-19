@@ -7,22 +7,14 @@ module Data.Flat.Types (
     module Data.Int,
     Natural,
     SBS.ShortByteString,
-    -- T.Text,
-    -- UTF8Text(..),
-    -- UTF16Text(..),
+    T.Text
     ) where
 
 import qualified Data.ByteString.Short.Internal as SBS
 import           Data.Int
--- import qualified Data.Text                      as T
+import qualified Data.Text                      as T
 import           Data.Word
 import           Numeric.Natural
 
 -- |Number of bits
 type NumBits = Int
-
--- -- |A wrapper to encode/decode Text as UTF8 (slower but more compact)
--- newtype UTF8Text = UTF8Text {unUTF8::T.Text} deriving (Eq,Ord,Show)
-
--- -- |A wrapper to encode/decode Text as UTF16 (faster but bigger)
--- newtype UTF16Text = UTF16Text {unUTF16::T.Text} deriving (Eq,Ord,Show)
