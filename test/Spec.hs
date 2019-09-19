@@ -60,15 +60,15 @@ import qualified Data.IntMap.Lazy  as CL
 #if MIN_VERSION_base(4,9,0)
 import qualified Data.List.NonEmpty as BI
 #endif
-  
-instance Arbitrary UTF8Text where
-  arbitrary = UTF8Text <$> arbitrary
-  shrink t = UTF8Text <$> shrink (unUTF8 t)
 
-instance Arbitrary UTF16Text where
-    arbitrary = UTF16Text <$> arbitrary
-    shrink t = UTF16Text <$> shrink (unUTF16 t)
-  
+-- instance Arbitrary UTF8Text where
+--   arbitrary = UTF8Text <$> arbitrary
+--   shrink t = UTF8Text <$> shrink (unUTF8 t)
+
+-- instance Arbitrary UTF16Text where
+--     arbitrary = UTF16Text <$> arbitrary
+--     shrink t = UTF16Text <$> shrink (unUTF16 t)
+
 -- instance Flat [Int16]
 -- instance Flat [Word8]
 -- instance Flat [Bool]
@@ -113,9 +113,9 @@ testPrimitives = testGroup "conversion/memory primitives" [
 testEncDec = testGroup "encode/decode primitives" [
    testEncodingPrim
   ,testDecodingPrim
-#ifdef TEST_DECBITS  
+#ifdef TEST_DECBITS
   ,testDecBits
-#endif  
+#endif
   ]
 
 testFlat = testGroup "flat/unflat" [
@@ -275,9 +275,9 @@ testSize = testGroup "Size" $ concat [
 #ifndef ghcjs_HOST_OS
   ,sz shBS bsSize
 #endif
-  ,sz tx utf8Size
-  ,sz (UTF8Text tx) utf8Size
-  ,sz (UTF16Text tx) utf16Size
+  -- ,sz tx utf8Size
+  -- ,sz (UTF8Text tx) utf8Size
+  -- ,sz (UTF16Text tx) utf16Size
  ]
    where
     tx = T.pack "txt"
@@ -315,7 +315,7 @@ testContainers = testGroup "containers" [
 
 flatUnflatRT = testGroup "unflat (flat v) == v"
   [  rt "()" (prop_Flat_roundtrip:: RT ())
-    ,rt "Bool" (prop_Flat_roundtrip::RT Bool)          
+    ,rt "Bool" (prop_Flat_roundtrip::RT Bool)
     ,rt "Char" (prop_Flat_roundtrip:: RT Char)
     ,rt "Complex" (prop_Flat_roundtrip:: RT (B.Complex Float))
     ,rt "Either N Bool" (prop_Flat_roundtrip:: RT (Either N Bool))
@@ -329,7 +329,7 @@ flatUnflatRT = testGroup "unflat (flat v) == v"
     ,rt "String" (prop_Flat_roundtrip:: RT String)
 #if MIN_VERSION_base(4,9,0)
     ,rt "NonEmpty" (prop_Flat_roundtrip:: RT (BI.NonEmpty Bool))
-#endif      
+#endif
     ,rt "Maybe N" (prop_Flat_roundtrip:: RT (Maybe N))
     ,rt "Ratio" (prop_Flat_roundtrip:: RT (B.Ratio Int32))
     ,rt "Word8" (prop_Flat_Large_roundtrip:: RTL Word8)
@@ -342,9 +342,9 @@ flatUnflatRT = testGroup "unflat (flat v) == v"
     ,rt "Float" (prop_Flat_roundtrip:: RT Float)
     ,rt "Double" (prop_Flat_roundtrip:: RT Double)
 
-    ,rt "Text" (prop_Flat_roundtrip:: RT T.Text)
-    ,rt "UTF8 Text" (prop_Flat_roundtrip:: RT UTF8Text)
-    ,rt "UTF16 Text" (prop_Flat_roundtrip:: RT UTF16Text)
+    -- ,rt "Text" (prop_Flat_roundtrip:: RT T.Text)
+    -- ,rt "UTF8 Text" (prop_Flat_roundtrip:: RT UTF8Text)
+    -- ,rt "UTF16 Text" (prop_Flat_roundtrip:: RT UTF16Text)
 
     ,rt "ByteString" (prop_Flat_roundtrip:: RT B.ByteString)
     ,rt "Lazy ByteString" (prop_Flat_roundtrip:: RT L.ByteString)
@@ -521,21 +521,21 @@ flatTests = testGroup "flat/unflat Unit tests" $ concat [
 
 -- See https://github.com/typelead/eta/issues/901
 #ifndef ETA_VERSION
-  ,[trip longAsciiStrT] 
-  ,[trip longBoolListT] 
+  ,[trip longAsciiStrT]
+  ,[trip longBoolListT]
 #endif
 
-  ,[trip asciiTextT] 
-  ,[trip english] 
+  ,[trip asciiTextT]
+  ,[trip english]
   ,[trip "维护和平正"]
   ,[trip (T.pack "abc")]
-  ,[trip unicodeText]
-  ,[trip unicodeTextUTF8T]
+  -- ,[trip unicodeText]
+  -- ,[trip unicodeTextUTF8T]
 
   ,[trip longBS,trip longLBS]
 #ifndef ghcjs_HOST_OS
   ,[trip longSBS]
-  ,[trip unicodeTextUTF16T]
+  -- ,[trip unicodeTextUTF16T]
 #endif
   ]
     where
