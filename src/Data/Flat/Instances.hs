@@ -209,22 +209,14 @@ instance Flat Double where
   encode = eDouble
   decode = dDouble
 
--- Instances for the text library
+-- Instances for the text library. It's a special instance for the
+-- reflex-platform, bacauses reflex-platform uses JSString for Text rather
+-- than the usual implementationuse .
 instance Flat T.Text where
-  size = sUTF8Max
-  encode = eUTF8
-  decode = dUTF8
+  size x b = size (T.unpack x) b
+  encode x = encode (T.unpack x)
+  decode = T.pack <$> decode
 
-instance Flat UTF8Text where
-  size (UTF8Text t) = sUTF8Max t
-  encode (UTF8Text t) = eUTF8 t
-  decode = UTF8Text <$> dUTF8
-#ifndef ghcjs_HOST_OS
-instance Flat UTF16Text where
-  size (UTF16Text t) = sUTF16 t
-  encode (UTF16Text t) = eUTF16 t
-  decode = UTF16Text <$> dUTF16
-#endif
 -- Instances for the bytestring library
 instance Flat B.ByteString where
   encode = eBytes

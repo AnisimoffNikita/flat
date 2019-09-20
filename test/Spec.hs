@@ -61,14 +61,6 @@ import qualified Data.IntMap.Lazy  as CL
 import qualified Data.List.NonEmpty as BI
 #endif
   
-instance Arbitrary UTF8Text where
-  arbitrary = UTF8Text <$> arbitrary
-  shrink t = UTF8Text <$> shrink (unUTF8 t)
-
-instance Arbitrary UTF16Text where
-    arbitrary = UTF16Text <$> arbitrary
-    shrink t = UTF16Text <$> shrink (unUTF16 t)
-  
 -- instance Flat [Int16]
 -- instance Flat [Word8]
 -- instance Flat [Bool]
@@ -276,12 +268,10 @@ testSize = testGroup "Size" $ concat [
   ,sz shBS bsSize
 #endif
   ,sz tx utf8Size
-  ,sz (UTF8Text tx) utf8Size
-  ,sz (UTF16Text tx) utf16Size
  ]
    where
     tx = T.pack "txt"
-    utf8Size = 8+8+3*32+8
+    utf8Size = (4+3*8)
     utf16Size = 8+8+3*16+8
     bsSize = 8+8+3*8+8
 
@@ -343,8 +333,6 @@ flatUnflatRT = testGroup "unflat (flat v) == v"
     ,rt "Double" (prop_Flat_roundtrip:: RT Double)
 
     ,rt "Text" (prop_Flat_roundtrip:: RT T.Text)
-    ,rt "UTF8 Text" (prop_Flat_roundtrip:: RT UTF8Text)
-    ,rt "UTF16 Text" (prop_Flat_roundtrip:: RT UTF16Text)
 
     ,rt "ByteString" (prop_Flat_roundtrip:: RT B.ByteString)
     ,rt "Lazy ByteString" (prop_Flat_roundtrip:: RT L.ByteString)
@@ -530,12 +518,10 @@ flatTests = testGroup "flat/unflat Unit tests" $ concat [
   ,[trip "维护和平正"]
   ,[trip (T.pack "abc")]
   ,[trip unicodeText]
-  ,[trip unicodeTextUTF8T]
 
   ,[trip longBS,trip longLBS]
 #ifndef ghcjs_HOST_OS
   ,[trip longSBS]
-  ,[trip unicodeTextUTF16T]
 #endif
   ]
     where

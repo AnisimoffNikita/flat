@@ -10,10 +10,6 @@ module Data.Flat.Decoder (
     dLazyByteString,
     dShortByteString,
     dShortByteString_,
-#ifndef ghcjs_HOST_OS
-    dUTF16,
-#endif
-    dUTF8,
     decodeArrayWith,
     decodeListWith,
     dFloat,

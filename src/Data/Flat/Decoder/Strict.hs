@@ -9,10 +9,6 @@ module Data.Flat.Decoder.Strict
   , dLazyByteString
   , dShortByteString
   , dShortByteString_
-  #ifndef ghcjs_HOST_OS
-  , dUTF16
-  #endif
-  , dUTF8
   , dInteger
   , dNatural
   , dChar
@@ -39,9 +35,6 @@ import           Data.Flat.Decoder.Types
 import           Data.Int
 import           Data.Primitive.ByteArray
 import qualified Data.Text                      as T
-import qualified Data.Text.Array                as TA
-import qualified Data.Text.Encoding             as T
-import qualified Data.Text.Internal             as T
 import           Data.Word
 import           Data.ZigZag
 import           GHC.Base                       (unsafeChr)
@@ -224,21 +217,6 @@ dUnsigned_ shl n = do
     else dUnsigned_ (shl + 7) v
 --encode = encode . blob UTF8Encoding . L.fromStrict . T.encodeUtf8
 --decode = T.decodeUtf8 . L.toStrict . (unblob :: BLOB UTF8Encoding -> L.ByteString) <$> decode
-#ifndef ghcjs_HOST_OS
--- BLOB UTF16Encoding
-dUTF16 :: Get T.Text
-dUTF16 = do
-  _ <- dFiller
-  -- Checked decoding
-  -- T.decodeUtf16LE <$> dByteString_
-  -- Unchecked decoding
-  (ByteArray array, lengthInBytes) <- dByteArray_
-  return (T.Text (TA.Array array) 0 (lengthInBytes `div` 2))
-#endif
-dUTF8 :: Get T.Text
-dUTF8 = do
-  _ <- dFiller
-  T.decodeUtf8 <$> dByteString_
 
 dFiller :: Get ()
 dFiller = do

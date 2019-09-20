@@ -187,9 +187,6 @@ longAsciiStrT = ("asciiStr", longS english )
 
 asciiTextT = ("asciiText", T.pack $ longS english )
 
-unicodeTextUTF8T = ("unicodeTextUTF8",UTF8Text unicodeText)
-unicodeTextUTF16T = ("unicodeTextUTF16",UTF16Text unicodeText)
-
 unicodeTextT = ("unicodeText",unicodeText)
 unicodeText = T.pack unicodeStr
 
